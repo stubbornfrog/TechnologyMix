@@ -1,0 +1,97 @@
+// 生成用于测试环境的WAR包
+apply plugin: 'war'
+
+sourceCompatibility = 1.8
+version = '1.0.0'
+
+repositories {
+	maven { url 'http://maven.aliyun.com/nexus/content/groups/public' }
+	mavenCentral()
+}
+
+dependencies {
+	// servlet api
+	compile group: 'javax.servlet', name: 'javax.servlet-api', version: '3.1.0'
+	
+	// Spring相关
+	compile group: 'org.springframework', name: 'spring-webmvc', version: '4.3.13.RELEASE'
+	compile group: 'org.springframework', name: 'spring-orm', version: '4.3.13.RELEASE'
+	compile group: 'org.springframework', name: 'spring-aop', version: '4.3.13.RELEASE'
+	compile group: 'org.springframework.session', name: 'spring-session', version: '1.3.1.RELEASE'
+	compile group: 'org.springframework.amqp', name: 'spring-rabbit', version: '1.7.5.RELEASE'
+	compile group: 'org.springframework.data', name: 'spring-data-redis', version: '1.8.9.RELEASE'
+
+	// Redis
+	compile group: 'biz.paluch.redis', name: 'lettuce', version: '4.4.2.Final'
+
+	// AOP
+	compile group: 'org.aspectj', name: 'aspectjweaver', version: '1.8.13'
+	
+	// 数据库相关
+	compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.44'
+	compile group: 'com.alibaba', name: 'druid', version: '1.1.6'
+	compile group: 'org.mybatis', name: 'mybatis', version: '3.4.5'
+	compile group: 'org.mybatis', name: 'mybatis-spring', version: '1.3.1'
+	
+	// 验证码图片生成
+	compile group: 'com.bladejava', name: 'blade-patchca', version: '1.1.0'
+
+	// 文件上传
+	compile group: 'commons-fileupload', name: 'commons-fileupload', version: '1.3.3'
+	
+	// Office文件操作
+	compile group: 'org.apache.poi', name: 'poi', version: '3.17'
+	
+	// 阿里云OSS
+	compile group: 'com.aliyun.oss', name: 'aliyun-sdk-oss', version: '2.8.3'
+
+	// 常用工具
+	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.7'
+	compile group: 'org.apache.commons', name: 'commons-text', version: '1.2'
+	compile group: 'commons-io', name: 'commons-io', version: '2.6'
+	compile group: 'com.alibaba', name: 'fastjson', version: '1.2.41'
+	compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.16.18'
+	
+	// 日志相关
+	compile group: 'ch.qos.logback', name: 'logback-core', version: '1.2.3'
+	compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+	compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
+	
+	// Netty
+    compile group: 'io.netty', name: 'netty-all', version: '4.1.24.Final'
+}
+
+test {
+  workingDir = rootProject.projectDir
+}
+
+// 排除测试配置文件
+processResources {
+	exclude '*.*'
+}
+
+// 打WAR包
+war {
+	baseName 'LAFSP'
+	classifier 'test'
+	webXml = file('webapp/WEB-INF/web.xml')
+	from('webapp') {
+		include 'doc/**'
+		include 'favicon.ico'
+	}
+	from('webapp/dist') {
+		include 'static/**'
+		include 'index.html'
+	}
+	from('src/env/test/WEB-INF/classes') {
+		into 'WEB-INF/classes'
+	}
+}
+
+tasks.withType(JavaCompile) {
+	options.encoding = 'UTF-8'
+}
+
+task wrapper(type: Wrapper) { 
+	gradleVersion = '4.3.1' 
+}

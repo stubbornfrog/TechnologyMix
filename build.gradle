@@ -1,0 +1,5 @@
+if (project.hasProperty('buildfile')) {
+    apply from: 'buildscript/' + project.getProperty('buildfile')
+} else {
+	apply from: 'buildscript/local.gradle'
+}

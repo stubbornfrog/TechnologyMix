@@ -1,0 +1,29 @@
+// 本地测试
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+sourceCompatibility = 1.8
+version = '1.0.0'
+
+repositories {
+    maven { url "http://maven.aliyun.com/nexus/content/groups/public" }
+    mavenCentral()
+}
+
+eclipse {
+	classpath { defaultOutputDir = file('webapp/WEB-INF/classes') }
+}
+
+dependencies {
+
+}
+
+// 复制JAR包
+task copyLibs(type: Copy) {
+	from configurations.compile
+    into 'webapp/WEB-INF/lib'
+}
+
+tasks.withType(JavaCompile) {
+	options.encoding = 'UTF-8'
+}
