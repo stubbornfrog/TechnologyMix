@@ -15,8 +15,10 @@ eclipse {
 }
 
 dependencies {
-
+	compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '2.2.2.RELEASE'
+	
 }
+
 
 // 复制JAR包
 task copyLibs(type: Copy) {
@@ -24,6 +26,11 @@ task copyLibs(type: Copy) {
     into 'webapp/WEB-INF/lib'
 }
 
-tasks.withType(JavaCompile) {
-	options.encoding = 'UTF-8'
+// 旧版本是:
+//task wrapper(type:Wrapper) {
+    //configuration
+//}
+// 新版本是：
+wrapper {
+	gradleVersion = '5.6.4'
 }
